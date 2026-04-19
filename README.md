@@ -234,7 +234,6 @@ Web Jingles requires a YouTube Data API v3 key to function.
 ## Roadmap
 
 - Improve performance  
-- Add playlist system  
 - Expand audio editing tools  
 - Improve download system  
 
@@ -243,7 +242,8 @@ Web Jingles requires a YouTube Data API v3 key to function.
 ## Known Issues
 
 - UI sound toggle may not work on all devices  
-- Some controller features are limited depending on hardware  
+- Some controller features are limited depending on hardware
+- Some videos on youtube are not showing up when searching for them
 
 ---
 
