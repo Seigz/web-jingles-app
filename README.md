@@ -3,11 +3,11 @@
 Web Jingles is a lightweight Android application that allows users to search, preview, and download game themes and OSTs using the YouTube Data API v3. The app is designed to be fast, minimal, and highly customizable, giving users full control over how audio is searched, processed, and saved.
 
 Downloaded audio files are saved by default to:  
-`/Music/Web Jingles/` (fully customizable in settings)
+`/Music/WebJingles/` (fully customizable in settings)
 
 The app focuses on flexibility, allowing users to adjust audio quality, formatting, UI behavior, and processing tools depending on their needs.
 
-This is **Beta 1.0**, meaning the app is still under active development with features being refined and expanded.
+This is **Beta 2.0**, meaning the app is still under active development with features being refined and expanded.
 
 ---
 
@@ -21,9 +21,10 @@ This is **Beta 1.0**, meaning the app is still under active development with fea
 
 Or manually:
 
-- Go to the **Releases** section
-- Download the latest APK
-- Install on your Android device
+- Go to the **Releases** section  
+- Open the latest release  
+- Download the APK from **Assets**  
+- Install on your Android device  
 
 ---
 
@@ -89,9 +90,9 @@ Shows the playback interface when a song is selected.
 Displays download configuration options before saving audio.
 
 ### Features
-- Preview button (listen before downloading)  
-- Download button (confirm save)  
-- Cancel button (exit dialog)  
+- Preview before download  
+- Confirm download button  
+- Cancel option  
 - Optional processing settings  
 
 ---
@@ -149,7 +150,7 @@ Full configuration hub for customizing the app experience.
 
 ### API Configuration
 - YouTube API Key input  
-- Get YouTube API Key button  
+- Get API Key button  
 
 ### Audio Settings
 - Preferred format (MP3 / WAV)  
@@ -162,6 +163,9 @@ Full configuration hub for customizing the app experience.
 - Portrait mode toggle  
 - Auto-download highest quality toggle  
 - Normalize audio volume toggle  
+- Better Search toggle (ON by default)  
+  - ON: standard search queries  
+  - OFF: enhances results with “game music OST” expansion  
 
 ### Display Settings
 - Fullscreen mode toggle  
@@ -170,42 +174,40 @@ Full configuration hub for customizing the app experience.
 ### Audio Tools
 - Enable trimming & fade tools toggle  
 - OFF = instant download  
-- ON = advanced download menu  
+- ON = advanced editing tools  
 
 ### Storage & Cache
 - Clear preview cache button  
 
 ### About
 - App name  
-- Version Beta 1.0  
+- Version Beta 2.0  
 
 ---
 
 ## YouTube Data API v3 Setup
 
-Web Jingles requires a YouTube Data API v3 key to function.
+Web Jingles requires a YouTube Data API v3 key.
 
 ### Steps:
 
 1. Open Google Cloud Console  
    https://console.cloud.google.com/
 
-2. Create a new project
+2. Create a new project  
 
-3. Enable **YouTube Data API v3**
-   - Go to APIs & Services → Library
-   - Search YouTube Data API v3
-   - Click Enable
+3. Enable YouTube Data API v3  
+   - APIs & Services → Library  
+   - Search and enable API  
 
-4. Create credentials
-   - Go to APIs & Services → Credentials
-   - Create API Key
+4. Create credentials  
+   - APIs & Services → Credentials  
+   - Create API Key  
 
-5. Copy your API key
+5. Copy your API key  
 
 6. Open Web Jingles → Settings  
-   - Click **YouTube API Key**
-   - Paste your key
+   - Paste API key into input field  
 
 ### Important Notes:
 - Do NOT share your API key publicly  
@@ -227,23 +229,20 @@ Web Jingles requires a YouTube Data API v3 key to function.
 
 - Internet access (YouTube search)  
 - Storage access (downloads)  
-- Media access (playback)  
+- Media playback  
 
 ---
 
 ## Roadmap
 
-- Improve performance  
-- Expand audio editing tools  
-- Improve download system  
+- Add support for automated track discovery and improved recommendations  
+- Integrate preset-based support for Cocoon-style audio configurations and themes  
 
 ---
 
 ## Known Issues
 
-- UI sound toggle may not work on all devices  
-- Some controller features are limited depending on hardware
-- Some videos on youtube are not showing up when searching for them
+- No major issues reported in this version  
 
 ---
 
