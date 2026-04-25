@@ -16,6 +16,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.MusicNote
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.CircularProgressIndicator
@@ -74,10 +76,6 @@ fun HomeScreen(
     val soundManager = LocalSoundManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
-    LaunchedEffect(settingsState.soundEnabled) {
-        soundManager?.enabled = settingsState.soundEnabled
-    }
-
     // Dismiss keyboard and unfocus when search finishes loading
     LaunchedEffect(searchState.isLoading) {
         if (!searchState.isLoading && searchState.results.isNotEmpty()) {
@@ -283,6 +281,64 @@ fun HomeScreen(
                                         playerViewModel.playPreview(result)
                                     }
                                 )
+                            }
+                            // Pagination controls
+                            if (searchState.prevPageToken != null || searchState.nextPageToken != null) {
+                                item {
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(vertical = 8.dp),
+                                        horizontalArrangement = Arrangement.Center,
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        androidx.compose.material3.TextButton(
+                                            onClick = {
+                                                soundManager?.playClick()
+                                                searchViewModel.prevPage()
+                                            },
+                                            enabled = searchState.prevPageToken != null
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                                contentDescription = "Previous",
+                                                tint = if (searchState.prevPageToken != null) BrandRed else TextDim,
+                                                modifier = Modifier.size(18.dp)
+                                            )
+                                            Spacer(Modifier.size(4.dp))
+                                            Text(
+                                                text = "Prev",
+                                                color = if (searchState.prevPageToken != null) BrandRed else TextDim
+                                            )
+                                        }
+                                        Spacer(Modifier.size(16.dp))
+                                        Text(
+                                            text = "Page ${searchState.currentPage}",
+                                            style = MaterialTheme.typography.titleMedium,
+                                            color = TextSecondary
+                                        )
+                                        Spacer(Modifier.size(16.dp))
+                                        androidx.compose.material3.TextButton(
+                                            onClick = {
+                                                soundManager?.playClick()
+                                                searchViewModel.nextPage()
+                                            },
+                                            enabled = searchState.nextPageToken != null
+                                        ) {
+                                            Text(
+                                                text = "Next",
+                                                color = if (searchState.nextPageToken != null) BrandRed else TextDim
+                                            )
+                                            Spacer(Modifier.size(4.dp))
+                                            Icon(
+                                                imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                                                contentDescription = "Next",
+                                                tint = if (searchState.nextPageToken != null) BrandRed else TextDim,
+                                                modifier = Modifier.size(18.dp)
+                                            )
+                                        }
+                                    }
+                                }
                             }
                             // Bottom spacer for mini player
                             item {

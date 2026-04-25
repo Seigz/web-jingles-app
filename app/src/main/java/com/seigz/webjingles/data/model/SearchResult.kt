@@ -13,7 +13,9 @@ data class SearchResult(
 )
 
 data class YouTubeSearchResponse(
-    val items: List<YouTubeSearchItem>?
+    val items: List<YouTubeSearchItem>?,
+    val nextPageToken: String?,
+    val prevPageToken: String?
 )
 
 data class YouTubeSearchItem(

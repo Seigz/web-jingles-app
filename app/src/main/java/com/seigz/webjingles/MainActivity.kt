@@ -88,6 +88,7 @@ class MainActivity : ComponentActivity() {
                     ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
                 }
                 applyFullscreenMode(state.fullscreenMode)
+                soundManager.enabled = state.soundEnabled
             }
         }
 
@@ -167,14 +168,7 @@ class MainActivity : ComponentActivity() {
             return true
         }
 
-        // Also handle D-pad from non-gamepad sources (keyboard etc.)
-        return when (keyCode) {
-            KeyEvent.KEYCODE_DPAD_UP -> { handleGamepadAction(GamepadAction.NAVIGATE_UP); true }
-            KeyEvent.KEYCODE_DPAD_DOWN -> { handleGamepadAction(GamepadAction.NAVIGATE_DOWN); true }
-            KeyEvent.KEYCODE_DPAD_LEFT -> { handleGamepadAction(GamepadAction.NAVIGATE_LEFT); true }
-            KeyEvent.KEYCODE_DPAD_RIGHT -> { handleGamepadAction(GamepadAction.NAVIGATE_RIGHT); true }
-            else -> super.onKeyDown(keyCode, event)
-        }
+        return super.onKeyDown(keyCode, event)
     }
 
     override fun onGenericMotionEvent(event: MotionEvent?): Boolean {

@@ -32,6 +32,7 @@ class AppPreferences(private val context: Context) {
         val UI_SCALE = floatPreferencesKey("ui_scale")
         val ADVANCED_MODE = booleanPreferencesKey("advanced_mode")
         val SOUND_ENABLED = booleanPreferencesKey("sound_enabled")
+        val BETTER_SEARCHING = booleanPreferencesKey("better_searching")
     }
 
     val preferredFormat: Flow<String> = context.dataStore.data.map { prefs ->
@@ -43,7 +44,7 @@ class AppPreferences(private val context: Context) {
     }
 
     val downloadFolderName: Flow<String> = context.dataStore.data.map { prefs ->
-        prefs[DOWNLOAD_FOLDER_NAME] ?: "/Music/CocoonJingles/"
+        prefs[DOWNLOAD_FOLDER_NAME] ?: "/Music/WebJingles/"
     }
 
     val enablePortrait: Flow<Boolean> = context.dataStore.data.map { prefs ->
@@ -66,6 +67,7 @@ class AppPreferences(private val context: Context) {
         prefs[RECENT_SEARCHES] ?: emptySet()
     }
 
+    @Suppress("unused")
     val favoritesJson: Flow<String> = context.dataStore.data.map { prefs ->
         prefs[FAVORITES_JSON] ?: "[]"
     }
@@ -84,6 +86,10 @@ class AppPreferences(private val context: Context) {
 
     val soundEnabled: Flow<Boolean> = context.dataStore.data.map { prefs ->
         prefs[SOUND_ENABLED] ?: true
+    }
+
+    val betterSearching: Flow<Boolean> = context.dataStore.data.map { prefs ->
+        prefs[BETTER_SEARCHING] ?: true
     }
 
     suspend fun setPreferredFormat(format: String) {
@@ -130,6 +136,7 @@ class AppPreferences(private val context: Context) {
         context.dataStore.edit { prefs -> prefs[RECENT_SEARCHES] = emptySet() }
     }
 
+    @Suppress("unused")
     suspend fun setFavoritesJson(json: String) {
         context.dataStore.edit { prefs -> prefs[FAVORITES_JSON] = json }
     }
@@ -152,5 +159,9 @@ class AppPreferences(private val context: Context) {
 
     suspend fun setSoundEnabled(enabled: Boolean) {
         context.dataStore.edit { prefs -> prefs[SOUND_ENABLED] = enabled }
+    }
+
+    suspend fun setBetterSearching(enabled: Boolean) {
+        context.dataStore.edit { prefs -> prefs[BETTER_SEARCHING] = enabled }
     }
 }

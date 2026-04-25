@@ -30,13 +30,14 @@ import androidx.compose.material.icons.filled.Key
 import androidx.compose.material.icons.filled.MusicNote
 import androidx.compose.material.icons.filled.ContentCut
 import androidx.compose.material.icons.filled.Fullscreen
-import androidx.compose.material.icons.filled.OpenInNew
+import androidx.compose.material.icons.automirrored.filled.OpenInNew
 import androidx.compose.material.icons.filled.ScreenRotation
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Speed
 import androidx.compose.material.icons.filled.Storage
 import androidx.compose.material.icons.filled.TextFields
-import androidx.compose.material.icons.filled.VolumeUp
+import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -162,7 +163,7 @@ fun SettingsScreen(
                 SettingsRow(
                     title = "Get YouTube API Key",
                     subtitle = "Open Google Cloud Console to enable API",
-                    icon = Icons.Default.OpenInNew,
+                    icon = Icons.AutoMirrored.Filled.OpenInNew,
                     isSelected = state.selectedRow == 1,
                     onClick = { uriHandler.openUri("https://console.cloud.google.com/marketplace/product/google/youtube.googleapis.com") },
                     accentColor = AccentOrange
@@ -192,11 +193,32 @@ fun SettingsScreen(
                 SettingsToggleRow(
                     title = "UI Sounds",
                     subtitle = "Play click sounds on button presses",
-                    icon = Icons.Default.VolumeUp,
+                    icon = Icons.AutoMirrored.Filled.VolumeUp,
                     isChecked = state.soundEnabled,
                     isSelected = state.selectedRow == 3,
                     onToggle = { viewModel.setSoundEnabled(it) },
                     accentColor = AccentPurple
+                )
+            }
+
+            // Search settings
+            item {
+                Spacer(Modifier.height(12.dp))
+                SettingsSectionHeader(
+                    title = "Search",
+                    icon = Icons.Default.Search,
+                    accentColor = AccentGreen
+                )
+            }
+            item {
+                SettingsToggleRow(
+                    title = "Better Searching",
+                    subtitle = if (state.betterSearching) "Find any video on YouTube" else "Optimized for game music (appends keywords)",
+                    icon = Icons.Default.Search,
+                    isChecked = state.betterSearching,
+                    isSelected = state.selectedRow == 4,
+                    onToggle = { viewModel.setBetterSearching(it) },
+                    accentColor = AccentGreen
                 )
             }
 
@@ -214,7 +236,7 @@ fun SettingsScreen(
                     title = "Download Folder",
                     subtitle = state.downloadFolderName,
                     icon = Icons.Default.Folder,
-                    isSelected = state.selectedRow == 4,
+                    isSelected = state.selectedRow == 5,
                     onClick = onChooseFolder,
                     accentColor = AccentGreen
                 )
@@ -235,7 +257,7 @@ fun SettingsScreen(
                     subtitle = "Allow screen rotation to portrait",
                     icon = Icons.Default.ScreenRotation,
                     isChecked = state.enablePortrait,
-                    isSelected = state.selectedRow == 5,
+                    isSelected = state.selectedRow == 6,
                     onToggle = { viewModel.setEnablePortrait(it) },
                     accentColor = BrandRed
                 )
@@ -246,7 +268,7 @@ fun SettingsScreen(
                     subtitle = "Automatically select best audio quality",
                     icon = Icons.Default.Speed,
                     isChecked = state.autoDownloadHQ,
-                    isSelected = state.selectedRow == 6,
+                    isSelected = state.selectedRow == 7,
                     onToggle = { viewModel.setAutoDownloadHQ(it) },
                     accentColor = BrandRed
                 )
@@ -255,9 +277,9 @@ fun SettingsScreen(
                 SettingsToggleRow(
                     title = "Normalize Audio Volume",
                     subtitle = "Equalize volume levels across tracks",
-                    icon = Icons.Default.VolumeUp,
+                    icon = Icons.AutoMirrored.Filled.VolumeUp,
                     isChecked = state.normalizeAudio,
-                    isSelected = state.selectedRow == 7,
+                    isSelected = state.selectedRow == 8,
                     onToggle = { viewModel.setNormalizeAudio(it) },
                     accentColor = BrandRed
                 )
@@ -278,7 +300,7 @@ fun SettingsScreen(
                     subtitle = "Hide system bars for immersive experience",
                     icon = Icons.Default.Fullscreen,
                     isChecked = state.fullscreenMode,
-                    isSelected = state.selectedRow == 8,
+                    isSelected = state.selectedRow == 9,
                     onToggle = { viewModel.setFullscreenMode(it) },
                     accentColor = AccentPurple
                 )
@@ -291,7 +313,7 @@ fun SettingsScreen(
                     value = state.uiScale,
                     valueRange = 0.5f..2.0f,
                     steps = 14,
-                    isSelected = state.selectedRow == 9,
+                    isSelected = state.selectedRow == 10,
                     onValueChange = { viewModel.setUiScale(it) },
                     accentColor = AccentPurple
                 )
@@ -312,7 +334,7 @@ fun SettingsScreen(
                     subtitle = "Adds audio editing to downloads & trims",
                     icon = Icons.Default.Settings,
                     isChecked = state.advancedMode,
-                    isSelected = state.selectedRow == 10,
+                    isSelected = state.selectedRow == 11,
                     onToggle = { viewModel.setAdvancedMode(it) },
                     accentColor = AccentGreen
                 )
@@ -332,7 +354,7 @@ fun SettingsScreen(
                     title = "Clear Preview Cache",
                     subtitle = "Current cache: ${state.cacheSize}",
                     icon = Icons.Default.CleaningServices,
-                    isSelected = state.selectedRow == 11,
+                    isSelected = state.selectedRow == 12,
                     onClick = { viewModel.clearCache() },
                     accentColor = AccentOrange
                 )
@@ -350,9 +372,9 @@ fun SettingsScreen(
             item {
                 SettingsRow(
                     title = "About Web Jingles",
-                    subtitle = "Version 1.0",
+                    subtitle = "Version beta-2.0",
                     icon = Icons.Default.Info,
-                    isSelected = state.selectedRow == 12,
+                    isSelected = state.selectedRow == 13,
                     onClick = { showAboutDialog = true },
                     accentColor = TextDim
                 )
@@ -424,6 +446,7 @@ private fun SettingsSectionHeader(
 }
 
 @Composable
+@Suppress("UNUSED_PARAMETER")
 private fun SettingsRow(
     title: String,
     subtitle: String,
@@ -466,6 +489,7 @@ private fun SettingsRow(
 }
 
 @Composable
+@Suppress("UNUSED_PARAMETER")
 private fun SettingsToggleRow(
     title: String,
     subtitle: String,
@@ -507,7 +531,7 @@ private fun SettingsToggleRow(
         }
         Switch(
             checked = isChecked,
-            onCheckedChange = onToggle,
+            onCheckedChange = { soundManager?.playClick(); onToggle(it) },
             colors = SwitchDefaults.colors(
                 checkedThumbColor = BrandRed,
                 checkedTrackColor = BrandRed.copy(alpha = 0.3f),
@@ -519,6 +543,7 @@ private fun SettingsToggleRow(
 }
 
 @Composable
+@Suppress("UNUSED_PARAMETER", "SameParameterValue")
 private fun SettingsSliderRow(
     title: String,
     subtitle: String,
@@ -721,7 +746,7 @@ private fun AboutDialog(onDismiss: () -> Unit) {
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(
-                    text = "Version 1.0",
+                    text = "Version beta-2.0",
                     style = MaterialTheme.typography.bodyLarge,
                     color = TextPrimary
                 )

@@ -17,7 +17,10 @@ data class SearchUiState(
     val isLoading: Boolean = false,
     val error: String? = null,
     val recentSearches: List<String> = emptyList(),
-    val selectedIndex: Int = -1
+    val selectedIndex: Int = -1,
+    val nextPageToken: String? = null,
+    val prevPageToken: String? = null,
+    val currentPage: Int = 1
 )
 
 class SearchViewModel(application: Application) : AndroidViewModel(application) {
@@ -41,13 +44,18 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
                 SearchRepository.API_KEY = key
             }
         }
+        viewModelScope.launch {
+            preferences.betterSearching.collect { enabled ->
+                SearchRepository.BETTER_SEARCHING = enabled
+            }
+        }
     }
 
     fun updateQuery(query: String) {
         _uiState.value = _uiState.value.copy(query = query)
     }
 
-    fun search(query: String? = null) {
+    fun search(query: String? = null, pageToken: String? = null, page: Int = 1) {
         val searchQuery = query ?: _uiState.value.query
         if (searchQuery.isBlank()) return
 
@@ -59,15 +67,20 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
         )
 
         viewModelScope.launch {
-            preferences.addRecentSearch(searchQuery)
+            if (page == 1) {
+                preferences.addRecentSearch(searchQuery)
+            }
 
-            val result = repository.search(searchQuery)
+            val result = repository.search(searchQuery, pageToken)
             result.fold(
-                onSuccess = { results ->
+                onSuccess = { searchPage ->
                     _uiState.value = _uiState.value.copy(
-                        results = results,
+                        results = searchPage.results,
                         isLoading = false,
-                        selectedIndex = if (results.isNotEmpty()) 0 else -1
+                        selectedIndex = if (searchPage.results.isNotEmpty()) 0 else -1,
+                        nextPageToken = searchPage.nextPageToken,
+                        prevPageToken = searchPage.prevPageToken,
+                        currentPage = page
                     )
                 },
                 onFailure = { error ->
@@ -78,6 +91,18 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
                 }
             )
         }
+    }
+
+    fun nextPage() {
+        val state = _uiState.value
+        val token = state.nextPageToken ?: return
+        search(state.query, pageToken = token, page = state.currentPage + 1)
+    }
+
+    fun prevPage() {
+        val state = _uiState.value
+        val token = state.prevPageToken ?: return
+        search(state.query, pageToken = token, page = state.currentPage - 1)
     }
 
     fun clearSearch() {

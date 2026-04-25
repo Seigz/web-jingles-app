@@ -24,6 +24,7 @@ data class SettingsUiState(
     val uiScale: Float = 1.0f,
     val advancedMode: Boolean = false,
     val soundEnabled: Boolean = true,
+    val betterSearching: Boolean = true,
     val selectedRow: Int = 0
 )
 
@@ -91,6 +92,12 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
                 _uiState.value = _uiState.value.copy(soundEnabled = enabled)
             }
         }
+        viewModelScope.launch {
+            preferences.betterSearching.collect { enabled ->
+                _uiState.value = _uiState.value.copy(betterSearching = enabled)
+                SearchRepository.BETTER_SEARCHING = enabled
+            }
+        }
         calculateCacheSize()
     }
 
@@ -137,6 +144,10 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         viewModelScope.launch { preferences.setSoundEnabled(enabled) }
     }
 
+    fun setBetterSearching(enabled: Boolean) {
+        viewModelScope.launch { preferences.setBetterSearching(enabled) }
+    }
+
     fun clearCache() {
         viewModelScope.launch {
             val cacheDir = getApplication<Application>().cacheDir
@@ -150,7 +161,7 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
 
     fun moveSelection(delta: Int) {
         val current = _uiState.value
-        val newRow = (current.selectedRow + delta).coerceIn(0, 12)
+        val newRow = (current.selectedRow + delta).coerceIn(0, 13)
         _uiState.value = current.copy(selectedRow = newRow)
     }
 

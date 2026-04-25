@@ -27,8 +27,7 @@ object GamepadHandler {
     fun handleKeyEvent(keyCode: Int, event: KeyEvent): GamepadAction {
         if (event.action != KeyEvent.ACTION_DOWN) return GamepadAction.NONE
 
-        if (!isGamepad(event.device)) return GamepadAction.NONE
-
+        // Accept D-pad and gamepad buttons from ANY input device for maximum compatibility
         return when (keyCode) {
             KeyEvent.KEYCODE_DPAD_UP -> GamepadAction.NAVIGATE_UP
             KeyEvent.KEYCODE_DPAD_DOWN -> GamepadAction.NAVIGATE_DOWN

@@ -2,6 +2,7 @@ package com.seigz.webjingles.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,9 +25,14 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
@@ -40,11 +46,11 @@ import com.seigz.webjingles.ui.theme.AccentOrange
 import com.seigz.webjingles.ui.theme.AccentRed
 import com.seigz.webjingles.ui.theme.DarkCard
 import com.seigz.webjingles.ui.theme.DarkSurfaceVariant
-
 import com.seigz.webjingles.ui.theme.TextDim
 import com.seigz.webjingles.ui.theme.TextPrimary
 import com.seigz.webjingles.ui.theme.TextSecondary
 
+@Suppress("UNUSED_PARAMETER")
 @Composable
 fun ResultItem(
     result: SearchResult,
@@ -127,36 +133,57 @@ fun ResultItem(
             )
         }
 
-        // Play button
+        // Play button — focusable for D-pad navigation
+        var playFocused by remember { mutableStateOf(false) }
         IconButton(
             onClick = onPlay,
             modifier = Modifier
                 .size(40.dp)
+                .focusable()
+                .onFocusChanged { playFocused = it.isFocused }
                 .background(
-                    if (isPlaying) BrandRed.copy(alpha = 0.15f) else Color.Transparent,
+                    when {
+                        playFocused -> BrandRed.copy(alpha = 0.3f)
+                        isPlaying -> BrandRed.copy(alpha = 0.15f)
+                        else -> Color.Transparent
+                    },
                     CircleShape
                 )
         ) {
             Icon(
                 imageVector = if (isPlaying) Icons.Default.Pause else Icons.Default.PlayArrow,
                 contentDescription = if (isPlaying) "Pause" else "Play",
-                tint = if (isPlaying) BrandRed else TextSecondary,
+                tint = when {
+                    playFocused -> BrandRed
+                    isPlaying -> BrandRed
+                    else -> TextSecondary
+                },
                 modifier = Modifier.size(24.dp)
             )
         }
 
-        // Download button / state
+        // Download button / state — focusable for D-pad navigation
         Box(
             modifier = Modifier.size(40.dp),
             contentAlignment = Alignment.Center
         ) {
             when (downloadState) {
                 is DownloadState.Idle -> {
-                    IconButton(onClick = onDownload) {
+                    var dlFocused by remember { mutableStateOf(false) }
+                    IconButton(
+                        onClick = onDownload,
+                        modifier = Modifier
+                            .focusable()
+                            .onFocusChanged { dlFocused = it.isFocused }
+                            .background(
+                                if (dlFocused) AccentGreen.copy(alpha = 0.25f) else Color.Transparent,
+                                CircleShape
+                            )
+                    ) {
                         Icon(
                             imageVector = Icons.Default.Download,
                             contentDescription = "Download",
-                            tint = TextSecondary,
+                            tint = if (dlFocused) AccentGreen else TextSecondary,
                             modifier = Modifier.size(24.dp)
                         )
                     }
@@ -178,7 +205,17 @@ fun ResultItem(
                     )
                 }
                 is DownloadState.Failed -> {
-                    IconButton(onClick = onDownload) {
+                    var dlFocused by remember { mutableStateOf(false) }
+                    IconButton(
+                        onClick = onDownload,
+                        modifier = Modifier
+                            .focusable()
+                            .onFocusChanged { dlFocused = it.isFocused }
+                            .background(
+                                if (dlFocused) AccentRed.copy(alpha = 0.25f) else Color.Transparent,
+                                CircleShape
+                            )
+                    ) {
                         Icon(
                             imageVector = Icons.Default.Download,
                             contentDescription = "Retry download",
